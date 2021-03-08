@@ -1,10 +1,10 @@
 {
   "name": "loan-manager",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Loan-manager api built using nestjs",
+  "author": "The_philosopher",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
