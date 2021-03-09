@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { Loan, LoanStatus } from './loans.model';
+import { LoanRequest, LoanStatus } from './loans.model';
 import { v4 as uuid } from 'uuid';
 import { LoanRequestDto } from 'src/dto/loanRequest.dto';
 
 @Injectable()
 export class LoansService {
-  private loans: Loan[] = [];
+  private loans: LoanRequest[] = [];
 
-  getAllLoanRequests(): Loan[] {
+  getAllLoanRequests(): LoanRequest[] {
     return this.loans;
   }
 
-  createLoanRequest(loanRequestDto: LoanRequestDto): Loan {
-    const { loanAmount, loanDuration } = loanRequestDto;
+  getLoanRequestById(id: string): LoanRequest {
+    return this.loans.find((loan) => loan.id === id);
+  }
+
+  createLoanRequest(loanRequestDto: LoanRequestDto): LoanRequest {
+    const { amount, duration } = loanRequestDto;
     const loanRequest = {
       id: uuid(),
       createdAt: Date.now(),
-      loanAmount,
-      loanDuration,
-      loanStatus: LoanStatus.NEW,
+      amount,
+      duration,
+      status: LoanStatus.NEW,
     };
     this.loans.push(loanRequest);
     return loanRequest;
+  }
+
+  updateLoanRequestStatus(id: string, status: LoanStatus): LoanRequest {
+    const found = this.getLoanRequestById(id);
+    found.status = status;
+    return found;
+  }
+
+  deleteLoanRequest(id: string): void {
+    this.loans = this.loans.filter((loan) => loan.id !== id);
   }
 }

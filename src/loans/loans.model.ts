@@ -1,9 +1,9 @@
-export interface Loan {
+export interface LoanRequest {
   id: string;
   createdAt: number;
-  loanAmount: number;
-  loanDuration: number;
-  loanStatus: LoanStatus;
+  amount: number;
+  duration: number;
+  status: LoanStatus;
 }
 
 export enum LoanStatus {

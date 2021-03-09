@@ -1,4 +1,4 @@
 export class LoanRequestDto {
-  loanAmount: number;
-  loanDuration: number;
+  amount: number;
+  duration: number;
 }
