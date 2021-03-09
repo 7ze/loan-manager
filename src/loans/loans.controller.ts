@@ -13,6 +13,7 @@ import {
 import { LoanRequestDto } from './dto/loanRequest.dto';
 import { LoanRequest, LoanStatus } from './loans.model';
 import { LoansService } from './loans.service';
+import { LoanStatusValidationPipe } from './pipes/loan-status-validation.pipe';
 
 @Controller('loans')
 export class LoansController {
@@ -37,7 +38,7 @@ export class LoansController {
   @Patch(':id/status')
   updateLoanRequestStatus(
     @Param('id') id: string,
-    @Body('status') status: LoanStatus,
+    @Body('status', LoanStatusValidationPipe) status: LoanStatus,
   ): LoanRequest {
     return this.loansService.updateLoanRequestStatus(id, status);
   }
