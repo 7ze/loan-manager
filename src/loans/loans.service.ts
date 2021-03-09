@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { LoanRequest, LoanStatus } from './loans.model';
 import { v4 as uuid } from 'uuid';
-import { LoanRequestDto } from './dto/loanRequest.dto';
+import { LoanRequestDto } from './dto/loan-request.dto';
 
 @Injectable()
 export class LoansService {
