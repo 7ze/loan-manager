@@ -7,9 +7,11 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
 import { LoanRequestDto } from './dto/loan-request.dto';
 import { LoanRequest, LoanStatus } from './loans.model';
 import { LoansService } from './loans.service';
@@ -20,7 +22,12 @@ export class LoansController {
   constructor(private loansService: LoansService) {}
 
   @Get()
-  getLoanRequests(): LoanRequest[] {
+  getLoanRequests(
+    @Query(ValidationPipe) loanRequestFilterDto: LoanRequestFilterDto,
+  ): LoanRequest[] {
+    if (Object.keys(loanRequestFilterDto).length) {
+      return this.loansService.getLoanRequestWithFilter(loanRequestFilterDto);
+    }
     return this.loansService.getAllLoanRequests();
   }
 

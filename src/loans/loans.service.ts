@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { LoanRequest, LoanStatus } from './loans.model';
 import { v4 as uuid } from 'uuid';
 import { LoanRequestDto } from './dto/loan-request.dto';
+import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
 
 @Injectable()
 export class LoansService {
@@ -9,6 +10,13 @@ export class LoansService {
 
   getAllLoanRequests(): LoanRequest[] {
     return this.loans;
+  }
+
+  getLoanRequestWithFilter(
+    loanRequestFilterDto: LoanRequestFilterDto,
+  ): LoanRequest[] {
+    const { status } = loanRequestFilterDto;
+    return this.loans.filter((loan) => loan.status === status);
   }
 
   getLoanRequestById(id: string): LoanRequest {
