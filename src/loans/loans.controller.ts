@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { LoanRequestDto } from 'src/dto/loanRequest.dto';
 import { Loan } from './loans.model';
 import { LoansService } from './loans.service';
 
@@ -12,10 +13,7 @@ export class LoansController {
   }
 
   @Post()
-  createLoanRequest(
-    @Body('loanAmount') loanAmount: number,
-    @Body('loanDuration') loanDuration: number,
-  ): Loan {
-    return this.loansService.createLoanRequest(loanAmount, loanDuration);
+  createLoanRequest(@Body() loanRequestDto: LoanRequestDto): Loan {
+    return this.loansService.createLoanRequest(loanRequestDto);
   }
 }

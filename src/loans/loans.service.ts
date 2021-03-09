@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Loan, LoanStatus } from './loans.model';
 import { v4 as uuid } from 'uuid';
+import { LoanRequestDto } from 'src/dto/loanRequest.dto';
 
 @Injectable()
 export class LoansService {
@@ -10,7 +11,8 @@ export class LoansService {
     return this.loans;
   }
 
-  createLoanRequest(loanAmount: number, loanDuration: number): Loan {
+  createLoanRequest(loanRequestDto: LoanRequestDto): Loan {
+    const { loanAmount, loanDuration } = loanRequestDto;
     const loanRequest = {
       id: uuid(),
       createdAt: Date.now(),
