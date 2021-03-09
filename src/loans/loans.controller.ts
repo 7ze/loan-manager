@@ -10,7 +10,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { LoanRequestDto } from 'src/dto/loanRequest.dto';
+import { LoanRequestDto } from './dto/loanRequest.dto';
 import { LoanRequest, LoanStatus } from './loans.model';
 import { LoansService } from './loans.service';
 
