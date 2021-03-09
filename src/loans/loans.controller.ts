@@ -7,6 +7,8 @@ import {
   Param,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { LoanRequestDto } from 'src/dto/loanRequest.dto';
 import { LoanRequest, LoanStatus } from './loans.model';
@@ -17,7 +19,7 @@ export class LoansController {
   constructor(private loansService: LoansService) {}
 
   @Get()
-  getAllLoans(): LoanRequest[] {
+  getLoanRequests(): LoanRequest[] {
     return this.loansService.getAllLoanRequests();
   }
 
@@ -27,6 +29,7 @@ export class LoansController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   createLoanRequest(@Body() loanRequestDto: LoanRequestDto): LoanRequest {
     return this.loansService.createLoanRequest(loanRequestDto);
   }

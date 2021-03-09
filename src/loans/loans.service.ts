@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { LoanRequest, LoanStatus } from './loans.model';
 import { v4 as uuid } from 'uuid';
 import { LoanRequestDto } from 'src/dto/loanRequest.dto';
@@ -12,7 +12,11 @@ export class LoansService {
   }
 
   getLoanRequestById(id: string): LoanRequest {
-    return this.loans.find((loan) => loan.id === id);
+    const found = this.loans.find((loan) => loan.id === id);
+    if (!found) {
+      throw new NotFoundException(`Loan request with id '${id}' not found!`);
+    }
+    return found;
   }
 
   createLoanRequest(loanRequestDto: LoanRequestDto): LoanRequest {
@@ -35,6 +39,7 @@ export class LoansService {
   }
 
   deleteLoanRequest(id: string): void {
-    this.loans = this.loans.filter((loan) => loan.id !== id);
+    const found = this.getLoanRequestById(id);
+    this.loans = this.loans.filter((loan) => loan.id !== found.id);
   }
 }
