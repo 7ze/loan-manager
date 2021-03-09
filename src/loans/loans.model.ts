@@ -1,6 +1,8 @@
 export interface Loan {
   id: string;
-  createdAt: Date;
+  createdAt: number;
+  loanAmount: number;
+  loanDuration: number;
   loanStatus: LoanStatus;
 }
 
