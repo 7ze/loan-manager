@@ -1,53 +1,44 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { LoanRequest, LoanStatus } from './loans.model';
-import { v4 as uuid } from 'uuid';
-import { LoanRequestDto } from './dto/loan-request.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
+import { LoanRequestDto } from './dto/loan-request.dto';
+import { LoanStatus } from './loan-status.enum';
+import { Loan } from './loan.entity';
+import { LoanRepository } from './loan.repository';
 
 @Injectable()
 export class LoansService {
-  private loans: LoanRequest[] = [];
+  constructor(
+    @InjectRepository(LoanRepository) private loanRepository: LoanRepository,
+  ) {}
 
-  getAllLoanRequests(): LoanRequest[] {
-    return this.loans;
+  getLoanRequests(loanRequestFilterDto: LoanRequestFilterDto): Promise<Loan[]> {
+    return this.loanRepository.getLoanRequests(loanRequestFilterDto);
   }
 
-  getLoanRequestWithFilter(
-    loanRequestFilterDto: LoanRequestFilterDto,
-  ): LoanRequest[] {
-    const { status } = loanRequestFilterDto;
-    return this.loans.filter((loan) => loan.status === status);
-  }
-
-  getLoanRequestById(id: string): LoanRequest {
-    const found = this.loans.find((loan) => loan.id === id);
+  async getLoanRequestById(id: number): Promise<Loan> {
+    const found = await this.loanRepository.findOne(id);
     if (!found) {
       throw new NotFoundException(`Loan request with id '${id}' not found!`);
     }
     return found;
   }
 
-  createLoanRequest(loanRequestDto: LoanRequestDto): LoanRequest {
-    const { amount, duration } = loanRequestDto;
-    const loanRequest = {
-      id: uuid(),
-      createdAt: Date.now(),
-      amount,
-      duration,
-      status: LoanStatus.NEW,
-    };
-    this.loans.push(loanRequest);
-    return loanRequest;
+  createLoanRequest(loanRequestDto: LoanRequestDto): Promise<Loan> {
+    return this.loanRepository.createLoanRequest(loanRequestDto);
   }
 
-  updateLoanRequestStatus(id: string, status: LoanStatus): LoanRequest {
-    const found = this.getLoanRequestById(id);
-    found.status = status;
+  async updateLoanRequestStatus(id: number, status: LoanStatus): Promise<Loan> {
+    const found = await this.getLoanRequestById(id);
+    found.loan_status = status;
+    await found.save();
     return found;
   }
 
-  deleteLoanRequest(id: string): void {
-    const found = this.getLoanRequestById(id);
-    this.loans = this.loans.filter((loan) => loan.id !== found.id);
+  async deleteLoanRequest(id: number): Promise<void> {
+    const { affected } = await this.loanRepository.delete(id);
+    if (!affected) {
+      throw new NotFoundException(`Loan request with id '${id}' not found!`);
+    }
   }
 }
