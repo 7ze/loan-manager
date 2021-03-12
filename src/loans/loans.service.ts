@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { LoanRepository } from './loan.repository';
 
 @Injectable()
 export class LoansService {
+  constructor(
+    @InjectRepository(LoanRepository) private loanRepository: LoanRepository,
+  ) {}
   // getAllLoanRequests(): LoanRequest[] {
   //   return this.loans;
   // }
