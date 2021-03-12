@@ -1,5 +1,5 @@
 import { IsIn, IsOptional } from 'class-validator';
-import { LoanStatus } from '../loans.model';
+import { LoanStatus } from '../loan-status.enum';
 
 export class LoanRequestFilterDto {
   @IsOptional()
