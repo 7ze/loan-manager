@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoanRequestDto } from './dto/loan-request.dto';
+import { LoanStatus } from './loan-status.enum';
 import { Loan } from './loan.entity';
 import { LoanRepository } from './loan.repository';
 
@@ -9,6 +10,7 @@ export class LoansService {
   constructor(
     @InjectRepository(LoanRepository) private loanRepository: LoanRepository,
   ) {}
+
   // getAllLoanRequests(): LoanRequest[] {
   //   return this.loans;
   // }
@@ -31,11 +33,12 @@ export class LoansService {
     return this.loanRepository.createLoanRequest(loanRequestDto);
   }
 
-  // updateLoanRequestStatus(id: string, status: LoanStatus): LoanRequest {
-  //   const found = this.getLoanRequestById(id);
-  //   found.status = status;
-  //   return found;
-  // }
+  async updateLoanRequestStatus(id: number, status: LoanStatus): Promise<Loan> {
+    const found = await this.getLoanRequestById(id);
+    found.loan_status = status;
+    await found.save();
+    return found;
+  }
 
   // deleteLoanRequest(id: string): void {
   //   const found = this.getLoanRequestById(id);

@@ -4,13 +4,16 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { LoanRequestDto } from './dto/loan-request.dto';
+import { LoanStatus } from './loan-status.enum';
 import { Loan } from './loan.entity';
 import { LoansService } from './loans.service';
+import { LoanStatusValidationPipe } from './pipes/loan-status-validation.pipe';
 
 @Controller('loans')
 export class LoansController {
@@ -37,13 +40,13 @@ export class LoansController {
     return this.loansService.createLoanRequest(loanRequestDto);
   }
 
-  // @Patch(':id/status')
-  // updateLoanRequestStatus(
-  //   @Param('id') id: string,
-  //   @Body('status', LoanStatusValidationPipe) status: LoanStatus,
-  // ): LoanRequest {
-  //   return this.loansService.updateLoanRequestStatus(id, status);
-  // }
+  @Patch(':id/status')
+  updateLoanRequestStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status', LoanStatusValidationPipe) status: LoanStatus,
+  ): Promise<Loan> {
+    return this.loansService.updateLoanRequestStatus(id, status);
+  }
 
   // @Delete(':id')
   // @HttpCode(204)
