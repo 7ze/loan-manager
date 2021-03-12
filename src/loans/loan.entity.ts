@@ -19,7 +19,7 @@ export class Loan extends BaseEntity {
   @Column()
   duration_months: number;
 
-  @Column()
+  @Column({ default: LoanStatus.NEW })
   loan_status: LoanStatus;
 
   @CreateDateColumn()

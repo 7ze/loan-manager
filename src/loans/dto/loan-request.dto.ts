@@ -2,8 +2,8 @@ import { IsNotEmpty } from 'class-validator';
 
 export class LoanRequestDto {
   @IsNotEmpty()
-  amount: number;
+  total_amount: number;
 
   @IsNotEmpty()
-  duration: number;
+  duration_months: number;
 }

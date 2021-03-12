@@ -1,4 +1,15 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { LoanRequestDto } from './dto/loan-request.dto';
+import { Loan } from './loan.entity';
 import { LoansService } from './loans.service';
 
 @Controller('loans')
@@ -15,16 +26,16 @@ export class LoansController {
   //   return this.loansService.getAllLoanRequests();
   // }
 
-  // @Get(':id')
-  // getLoanRequestById(@Param('id') id: string): LoanRequest {
-  //   return this.loansService.getLoanRequestById(id);
-  // }
+  @Get(':id')
+  getLoanRequestById(@Param('id', ParseIntPipe) id: number): Promise<Loan> {
+    return this.loansService.getLoanRequestById(id);
+  }
 
-  // @Post()
-  // @UsePipes(ValidationPipe)
-  // createLoanRequest(@Body() loanRequestDto: LoanRequestDto): LoanRequest {
-  //   return this.loansService.createLoanRequest(loanRequestDto);
-  // }
+  @Post()
+  @UsePipes(ValidationPipe)
+  createLoanRequest(@Body() loanRequestDto: LoanRequestDto): Promise<Loan> {
+    return this.loansService.createLoanRequest(loanRequestDto);
+  }
 
   // @Patch(':id/status')
   // updateLoanRequestStatus(
