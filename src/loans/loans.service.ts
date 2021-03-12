@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
 import { LoanRequestDto } from './dto/loan-request.dto';
 import { LoanStatus } from './loan-status.enum';
 import { Loan } from './loan.entity';
@@ -11,15 +12,9 @@ export class LoansService {
     @InjectRepository(LoanRepository) private loanRepository: LoanRepository,
   ) {}
 
-  // getAllLoanRequests(): LoanRequest[] {
-  //   return this.loans;
-  // }
-  // getLoanRequestWithFilter(
-  //   loanRequestFilterDto: LoanRequestFilterDto,
-  // ): LoanRequest[] {
-  //   const { status } = loanRequestFilterDto;
-  //   return this.loans.filter((loan) => loan.status === status);
-  // }
+  getLoanRequests(loanRequestFilterDto: LoanRequestFilterDto): Promise<Loan[]> {
+    return this.loanRepository.getLoanRequests(loanRequestFilterDto);
+  }
 
   async getLoanRequestById(id: number): Promise<Loan> {
     const found = await this.loanRepository.findOne(id);
@@ -40,8 +35,10 @@ export class LoansService {
     return found;
   }
 
-  // deleteLoanRequest(id: string): void {
-  //   const found = this.getLoanRequestById(id);
-  //   this.loans = this.loans.filter((loan) => loan.id !== found.id);
-  // }
+  async deleteLoanRequest(id: number): Promise<void> {
+    const { affected } = await this.loanRepository.delete(id);
+    if (!affected) {
+      throw new NotFoundException(`Loan request with id '${id}' not found!`);
+    }
+  }
 }

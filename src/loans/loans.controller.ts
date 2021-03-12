@@ -1,14 +1,18 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
 import { LoanRequestDto } from './dto/loan-request.dto';
 import { LoanStatus } from './loan-status.enum';
 import { Loan } from './loan.entity';
@@ -19,15 +23,12 @@ import { LoanStatusValidationPipe } from './pipes/loan-status-validation.pipe';
 export class LoansController {
   constructor(private loansService: LoansService) {}
 
-  // @Get()
-  // getLoanRequests(
-  //   @Query(ValidationPipe) loanRequestFilterDto: LoanRequestFilterDto,
-  // ): LoanRequest[] {
-  //   if (Object.keys(loanRequestFilterDto).length) {
-  //     return this.loansService.getLoanRequestWithFilter(loanRequestFilterDto);
-  //   }
-  //   return this.loansService.getAllLoanRequests();
-  // }
+  @Get()
+  getLoanRequests(
+    @Query(ValidationPipe) loanRequestFilterDto: LoanRequestFilterDto,
+  ): Promise<Loan[]> {
+    return this.loansService.getLoanRequests(loanRequestFilterDto);
+  }
 
   @Get(':id')
   getLoanRequestById(@Param('id', ParseIntPipe) id: number): Promise<Loan> {
@@ -48,9 +49,9 @@ export class LoansController {
     return this.loansService.updateLoanRequestStatus(id, status);
   }
 
-  // @Delete(':id')
-  // @HttpCode(204)
-  // deleteLoanRequest(@Param('id') id: string): void {
-  //   return this.loansService.deleteLoanRequest(id);
-  // }
+  @Delete(':id')
+  @HttpCode(204)
+  deleteLoanRequest(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.loansService.deleteLoanRequest(id);
+  }
 }
