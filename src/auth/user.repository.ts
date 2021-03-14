@@ -30,4 +30,17 @@ export class UserRepository extends Repository<User> {
         : new InternalServerErrorException();
     }
   }
+
+  async validateUserPassword(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<string> {
+    const { username, password } = authCredentialsDto;
+    const user = await this.findOne({ username });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return user.username;
+    } else {
+      return null;
+    }
+  }
 }
