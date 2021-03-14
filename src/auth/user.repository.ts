@@ -1,3 +1,8 @@
+import {
+  ConflictException,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { DatabaseErrors } from 'src/utils/database-errors.enum';
 import { EntityRepository, Repository } from 'typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from './user.entity';
@@ -9,6 +14,12 @@ export class UserRepository extends Repository<User> {
     const user = new User();
     user.username = username;
     user.password = password;
-    await user.save();
+    try {
+      await user.save();
+    } catch (err) {
+      throw err.code === DatabaseErrors.CONFLICT
+        ? new ConflictException('Username exists!')
+        : new InternalServerErrorException();
+    }
   }
 }
