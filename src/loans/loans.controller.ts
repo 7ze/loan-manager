@@ -9,9 +9,11 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
 import { LoanRequestDto } from './dto/loan-request.dto';
 import { LoanStatus } from './loan-status.enum';
@@ -20,6 +22,7 @@ import { LoansService } from './loans.service';
 import { LoanStatusValidationPipe } from './pipes/loan-status-validation.pipe';
 
 @Controller('loans')
+@UseGuards(AuthGuard())
 export class LoansController {
   constructor(private loansService: LoansService) {}
 
