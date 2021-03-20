@@ -1,9 +1,28 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
 export class LoanRequestDto {
+  @IsNumber()
+  @IsPositive()
   @IsNotEmpty()
-  total_amount: number;
+  customer_id: number;
 
+  @IsNumber()
+  @IsPositive()
   @IsNotEmpty()
-  duration_months: number;
+  total_loan_amount: number;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  emi: number;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  rate_of_interest: number;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  tenure_months: number;
 }
