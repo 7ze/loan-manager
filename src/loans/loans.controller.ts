@@ -14,6 +14,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
 import { LoanRequestDto } from './dto/loan-request.dto';
 import { LoanStatus } from './loan-status.enum';
@@ -39,6 +41,8 @@ export class LoansController {
   }
 
   @Post()
+  @Roles('agent')
+  @UseGuards(RolesGuard)
   @UsePipes(ValidationPipe)
   createLoanRequest(@Body() loanRequestDto: LoanRequestDto): Promise<Loan> {
     return this.loansService.createLoanRequest(loanRequestDto);
@@ -56,5 +60,12 @@ export class LoansController {
   @HttpCode(204)
   deleteLoanRequest(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.loansService.deleteLoanRequest(id);
+  }
+
+  @Post('test')
+  @Roles('customer')
+  @UseGuards(RolesGuard)
+  test() {
+    return 'hello, world!';
   }
 }

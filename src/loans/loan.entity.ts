@@ -32,7 +32,4 @@ export class Loan extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.loans, { eager: false })
   user: User;
-
-  @Column()
-  userId: number;
 }
