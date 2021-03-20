@@ -1,3 +1,4 @@
+import { User } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
 import { LoanRequestDto } from './dto/loan-request.dto';
@@ -16,7 +17,10 @@ export class LoanRepository extends Repository<Loan> {
     return await query.getMany();
   }
 
-  async createLoanRequest(loanRequestDto: LoanRequestDto): Promise<Loan> {
+  async createLoanRequest(
+    loanRequestDto: LoanRequestDto,
+    user: User,
+  ): Promise<Loan> {
     const loanRequest = new Loan();
 
     for (const key in loanRequestDto) {
@@ -25,7 +29,10 @@ export class LoanRepository extends Repository<Loan> {
       }
     }
 
+    loanRequest.agent = user;
     await loanRequest.save();
+
+    delete loanRequest.agent;
     return loanRequest;
   }
 }

@@ -28,6 +28,6 @@ export class User extends BaseEntity {
   @CreateDateColumn()
   created_at: Date;
 
-  @OneToMany(() => Loan, (loan) => loan.user, { eager: true })
+  @OneToMany(() => Loan, (loan) => loan.agent, { eager: true })
   loans: Loan[];
 }

@@ -14,8 +14,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { User } from 'src/auth/user.entity';
 import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
 import { LoanRequestDto } from './dto/loan-request.dto';
 import { LoanStatus } from './loan-status.enum';
@@ -44,8 +46,11 @@ export class LoansController {
   @Roles('agent')
   @UseGuards(RolesGuard)
   @UsePipes(ValidationPipe)
-  createLoanRequest(@Body() loanRequestDto: LoanRequestDto): Promise<Loan> {
-    return this.loansService.createLoanRequest(loanRequestDto);
+  createLoanRequest(
+    @Body() loanRequestDto: LoanRequestDto,
+    @GetUser() user: User,
+  ): Promise<Loan> {
+    return this.loansService.createLoanRequest(loanRequestDto, user);
   }
 
   @Patch(':id/status')

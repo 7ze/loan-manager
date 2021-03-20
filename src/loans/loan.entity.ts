@@ -40,5 +40,5 @@ export class Loan extends BaseEntity {
   updated_at: Date;
 
   @ManyToOne(() => User, (user) => user.loans, { eager: false })
-  user: User;
+  agent: User;
 }
