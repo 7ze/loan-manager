@@ -1,8 +1,10 @@
+import { Loan } from 'src/loans/loan.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
@@ -25,4 +27,7 @@ export class User extends BaseEntity {
 
   @CreateDateColumn()
   created_at: Date;
+
+  @OneToMany(() => Loan, (loan) => loan.user, { eager: true })
+  loans: Loan[];
 }
