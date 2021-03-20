@@ -49,6 +49,8 @@ export class LoansController {
   }
 
   @Patch(':id/status')
+  @Roles('admin')
+  @UseGuards(RolesGuard)
   updateLoanRequestStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body('status', LoanStatusValidationPipe) status: LoanStatus,
@@ -60,12 +62,5 @@ export class LoansController {
   @HttpCode(204)
   deleteLoanRequest(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.loansService.deleteLoanRequest(id);
-  }
-
-  @Post('test')
-  @Roles('customer')
-  @UseGuards(RolesGuard)
-  test() {
-    return 'hello, world!';
   }
 }
