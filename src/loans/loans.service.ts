@@ -13,8 +13,11 @@ export class LoansService {
     @InjectRepository(LoanRepository) private loanRepository: LoanRepository,
   ) {}
 
-  getLoanRequests(loanRequestFilterDto: LoanRequestFilterDto): Promise<Loan[]> {
-    return this.loanRepository.getLoanRequests(loanRequestFilterDto);
+  getLoanRequests(
+    loanRequestFilterDto: LoanRequestFilterDto,
+    user: User,
+  ): Promise<Loan[]> {
+    return this.loanRepository.getLoanRequests(loanRequestFilterDto, user);
   }
 
   async getLoanRequestById(id: number): Promise<Loan> {

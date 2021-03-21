@@ -33,8 +33,9 @@ export class LoansController {
   @Get()
   getLoanRequests(
     @Query(ValidationPipe) loanRequestFilterDto: LoanRequestFilterDto,
+    @GetUser() user: User,
   ): Promise<Loan[]> {
-    return this.loansService.getLoanRequests(loanRequestFilterDto);
+    return this.loansService.getLoanRequests(loanRequestFilterDto, user);
   }
 
   @Get(':id')
