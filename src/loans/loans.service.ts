@@ -37,6 +37,8 @@ export class LoansService {
   }
 
   createLoanRequest(loanRequestDto: LoanRequestDto, user: User): Promise<Loan> {
+    // const { customer_id } = loanRequestDto;
+    // # todo -> find out if a customer with that customer_id exists
     return this.loanRepository.createLoanRequest(loanRequestDto, user);
   }
 

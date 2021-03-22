@@ -41,4 +41,7 @@ export class Loan extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.loans, { eager: false })
   agent: User;
+
+  @Column()
+  agentId: number; // typeorm auto-generated
 }
