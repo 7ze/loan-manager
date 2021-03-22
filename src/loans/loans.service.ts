@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRole } from 'src/auth/user-role.enum';
 import { User } from 'src/auth/user.entity';
+import { UserRepository } from 'src/auth/user.repository';
 import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
 import { LoanRequestDto } from './dto/loan-request.dto';
-// import { LoanStatus } from './loan-status.enum';
 import { Loan } from './loan.entity';
 import { LoanRepository } from './loan.repository';
 
@@ -12,6 +12,7 @@ import { LoanRepository } from './loan.repository';
 export class LoansService {
   constructor(
     @InjectRepository(LoanRepository) private loanRepository: LoanRepository,
+    @InjectRepository(UserRepository) private userRepository: UserRepository,
   ) {}
 
   getLoanRequests(
@@ -36,9 +37,17 @@ export class LoansService {
     return found;
   }
 
-  createLoanRequest(loanRequestDto: LoanRequestDto, user: User): Promise<Loan> {
-    // const { customer_id } = loanRequestDto;
-    // # todo -> find out if a customer with that customer_id exists
+  async createLoanRequest(
+    loanRequestDto: LoanRequestDto,
+    user: User,
+  ): Promise<Loan> {
+    const { customer_id } = loanRequestDto;
+    const found = await this.userRepository.findOne(customer_id);
+
+    if (!found || found.role !== UserRole.CUSTOMER) {
+      throw new NotFoundException(`Customer with id ${customer_id} not found!`);
+    }
+
     return this.loanRepository.createLoanRequest(loanRequestDto, user);
   }
 
