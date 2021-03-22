@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRole } from 'src/auth/user-role.enum';
 import { User } from 'src/auth/user.entity';
@@ -64,9 +68,16 @@ export class LoansService {
   }
 
   async deleteLoanRequest(id: number): Promise<void> {
-    const { affected } = await this.loanRepository.delete(id);
-    if (!affected) {
+    const found = await this.loanRepository.findOne(id);
+
+    if (!found) {
       throw new NotFoundException(`Loan request with id '${id}' not found!`);
     }
+
+    if (found.loan_status !== LoanStatus.REJECTED) {
+      throw new UnauthorizedException('Loan request still active!');
+    }
+
+    await this.loanRepository.delete(id);
   }
 }
