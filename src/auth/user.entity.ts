@@ -25,7 +25,7 @@ export class User extends BaseEntity {
   @Column({ default: UserRole.CUSTOMER })
   role: UserRole;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'date' })
   created_at: Date;
 
   @OneToMany(() => Loan, (loan) => loan.agent, { eager: true })
