@@ -71,6 +71,8 @@ export class LoansController {
 
   @Delete(':id')
   @HttpCode(204)
+  @Roles(UserRole.AGENT)
+  @UseGuards(RolesGuard)
   deleteLoanRequest(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.loansService.deleteLoanRequest(id);
   }
