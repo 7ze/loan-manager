@@ -5,6 +5,7 @@ import { User } from 'src/auth/user.entity';
 import { UserRepository } from 'src/auth/user.repository';
 import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
 import { LoanRequestDto } from './dto/loan-request.dto';
+import { LoanStatus } from './loan-status.enum';
 import { Loan } from './loan.entity';
 import { LoanRepository } from './loan.repository';
 
@@ -51,12 +52,16 @@ export class LoansService {
     return this.loanRepository.createLoanRequest(loanRequestDto, user);
   }
 
-  // async updateLoanRequestStatus(id: number, status: LoanStatus): Promise<Loan> {
-  //   const found = await this.getLoanRequestById(id);
-  //   found.loan_status = status;
-  //   await found.save();
-  //   return found;
-  // }
+  async updateLoanRequestStatus(
+    id: number,
+    status: LoanStatus,
+    user: User,
+  ): Promise<Loan> {
+    const found = await this.getLoanRequestById(id, user);
+    found.loan_status = status;
+    await found.save();
+    return found;
+  }
 
   async deleteLoanRequest(id: number): Promise<void> {
     const { affected } = await this.loanRepository.delete(id);
