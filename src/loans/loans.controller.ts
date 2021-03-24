@@ -22,7 +22,7 @@ import { LoanRequestDto, LoanRequestFilterDto } from './dto';
 import { LoanStatus } from './loan-status.enum';
 import { Loan } from './loan.entity';
 import { LoansService } from './loans.service';
-import { LoanStatusValidationPipe } from './pipes/loan-status-validation.pipe';
+import { LoanStatusValidationPipe } from './pipes';
 
 @Controller('loans')
 @UseGuards(AuthGuard())
