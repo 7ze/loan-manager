@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser, Roles } from 'src/auth/decorators';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { RolesGuard } from 'src/auth/guards';
 import { UserRole } from 'src/auth/user-role.enum';
 import { User } from 'src/auth/user.entity';
 import { LoanRequestDto, LoanRequestFilterDto } from './dto';
