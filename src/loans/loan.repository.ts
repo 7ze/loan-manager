@@ -1,8 +1,7 @@
 import { UserRole } from 'src/auth/user-role.enum';
 import { User } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
-import { LoanRequestDto } from './dto/loan-request.dto';
+import { LoanRequestDto, LoanRequestFilterDto } from './dto';
 import { Loan } from './loan.entity';
 
 @EntityRepository(Loan)
