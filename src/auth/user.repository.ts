@@ -5,8 +5,8 @@ import {
 import { DatabaseErrors } from 'src/utils/database-errors.enum';
 import { EntityRepository, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from './user.entity';
+import { AuthCredentialsDto } from './dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
