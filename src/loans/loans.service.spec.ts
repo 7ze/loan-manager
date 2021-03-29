@@ -1,15 +1,19 @@
 import { Test } from '@nestjs/testing';
+import { User } from 'src/auth/user.entity';
 import { UserRepository } from 'src/auth/user.repository';
+import { LoanStatus } from './loan-status.enum';
 import { LoanRepository } from './loan.repository';
 import { LoansService } from './loans.service';
 
 const mockLoanRepository = () => ({
-  //
+  getLoanRequests: jest.fn(),
 });
 
 const mockUserRepository = () => ({
   //
 });
+
+const mockUser = new User();
 
 describe('LoansService', () => {
   let loansService;
@@ -36,7 +40,24 @@ describe('LoansService', () => {
     userRepository = module.get<UserRepository>(UserRepository);
   });
 
-  it('some test', () => {
-    // some test
+  describe('getLoanRequests', () => {
+    it('should be a pure function that returns the result of loanRepository.getLoanRequests()', async () => {
+      loanRepository.getLoanRequests.mockResolvedValue('loan_requests');
+      const mockLoanRequestFilterDto = {
+        status: LoanStatus.NEW,
+      };
+
+      expect(loanRepository.getLoanRequests).not.toHaveBeenCalled();
+      const result = await loansService.getLoanRequests(
+        mockLoanRequestFilterDto,
+        mockUser,
+      );
+      expect(loanRepository.getLoanRequests).toHaveBeenCalledWith(
+        mockLoanRequestFilterDto,
+        mockUser,
+      );
+      expect(result).toEqual('loan_requests');
+      expect(result).not.toEqual('some_modified_result');
+    });
   });
 });
