@@ -14,17 +14,15 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/decorators/get-user.decorator';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { GetUser, Roles } from 'src/auth/decorators';
+import { RolesGuard } from 'src/auth/guards';
 import { UserRole } from 'src/auth/user-role.enum';
 import { User } from 'src/auth/user.entity';
-import { LoanRequestFilterDto } from './dto/loan-request-filter.dto';
-import { LoanRequestDto } from './dto/loan-request.dto';
+import { LoanRequestDto, LoanRequestFilterDto } from './dto';
 import { LoanStatus } from './loan-status.enum';
 import { Loan } from './loan.entity';
 import { LoansService } from './loans.service';
-import { LoanStatusValidationPipe } from './pipes/loan-status-validation.pipe';
+import { LoanStatusValidationPipe } from './pipes';
 
 @Controller('loans')
 @UseGuards(AuthGuard())
