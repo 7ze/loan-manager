@@ -10,10 +10,11 @@ import { LoansService } from './loans.service';
 const mockLoanRepository = () => ({
   getLoanRequests: jest.fn(),
   findOne: jest.fn(),
+  createLoanRequest: jest.fn(),
 });
 
 const mockUserRepository = () => ({
-  //
+  findOne: jest.fn(),
 });
 
 const mockUser = new User();
@@ -102,6 +103,50 @@ describe('LoansService', () => {
       const result = await loansService.getLoanRequestById(1, mockUser);
       expect(result).toEqual('mock_user');
       expect(result).not.toEqual('something_else');
+    });
+  });
+
+  describe('createLoanRequest', () => {
+    it('should throw a NotFoundException if loan applicant is not a customer', async () => {
+      const mockLoanRequestDto = {
+        customer_id: 1,
+      };
+      mockUser.role = UserRole.AGENT;
+      userRepository.findOne.mockResolvedValue(mockUser);
+      await expect(
+        loansService.createLoanRequest(mockLoanRequestDto, mockUser),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw a NotFoundException if customer is not found', async () => {
+      const mockLoanRequestDto = {
+        customer_id: 1,
+      };
+      userRepository.findOne.mockResolvedValue(undefined);
+
+      await expect(
+        loansService.createLoanRequest(mockLoanRequestDto, mockUser),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('should return the result of loanRepository.createLoanRequest() unchanged if loan applicant is a customer', async () => {
+      const mockLoanRequestDto = {
+        customer_id: 1,
+      };
+      mockUser.role = UserRole.CUSTOMER;
+      userRepository.findOne.mockResolvedValue(mockUser);
+      loanRepository.createLoanRequest.mockResolvedValue('new_loan_request');
+
+      expect(loanRepository.createLoanRequest).not.toHaveBeenCalled();
+      const result = await loansService.createLoanRequest(
+        mockLoanRequestDto,
+        mockUser,
+      );
+      expect(loanRepository.createLoanRequest).toHaveBeenCalledWith(
+        mockLoanRequestDto,
+        mockUser,
+      );
+      expect(result).toEqual('new_loan_request');
     });
   });
 });
